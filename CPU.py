@@ -1,41 +1,38 @@
 import simpy
 import random
 
-RANDOM_SEED = 3
-PROCESOS = 5  #numero total de procesos
-INTERVALO = 10.0  # Genera un nuevo proceso cada 10
-CPUTIME = 1  # timpo en completar 3 instrucciones
+RANDOM_SEED = 33
+PROCESOS = 25 #numero total de procesos
+INTERVALO = 10.0 #Genera un nuevo proceso cada x
+CPUTIME = 1 #timpo en completar CPUINST instrucciones
+CPUINST = 3 #Cantidad de instrucciones que realiza cpu en CPUTIME
+tiempos = []
 
 def source(env, cantidad, intervalo, cpu):
-    print_stats(cpu)
     for i in range(cantidad):
-        c = proceso(env, 'Proceso%02d' % i, cpu,random.randint(1,10) ,random.randint(1,10), CPUTIME)
+        c = proceso(env, "proceso_" + str(i), cpu,random.randint(1,10) ,random.randint(1,10),CPUTIME,CPUINST)
         env.process(c)
         t = random.expovariate(1.0 / intervalo)
         yield env.timeout(t)
 
-def proceso(env, nombre, cpu, ram, instrucciones, tiempo):
-    arrive = env.now
-    print('%7.4f %s: new' % (arrive, nombre))
+def proceso(env, nombre, cpu, ram, instrucciones, tiempo, instportiempo):
+    created = env.now
     yield RAM.get(ram)
-    while instrucciones > 3:
+    while instrucciones > 0:
         with cpu.request() as req:
             yield req
-            print('%7.4f %s: running' % (arrive, nombre))
-            if instrucciones < 3:
-                yield env.timeout(tiempo)
-                RAM.put(ram)
-                print('%7.4f %s: Terminated' % (env.now, nombre))
-            elif instrucciones >= 3:
-                yield env.timeout(tiempo)
-                instrucciones -= 3
-        
+            yield env.timeout(tiempo)
+            instrucciones -= instportiempo
+        if instrucciones > 0:
+            io = random.randint(1,2)
+            if io == 1:
+                simulacion = random.randint(1,5)
+                yield env.timeout(simulacion)
 
-
-def print_stats(res):
-    print(f'{res.count} of {res.capacity} slots are allocated.')
-    print(f'  running: {res.users}')
-    print(f'  ready: {res.queue}')
+    RAM.put(ram)
+    TiempoTerminar = round((env.now - created), 2)
+    tiempos.append(TiempoTerminar)
+    print(nombre, "created at: ", round(created, 2) ," Terminated at:", round(env.now, 2) ,"Time to terminate: ",TiempoTerminar)
 
 random.seed(RANDOM_SEED)
 env = simpy.Environment()
@@ -44,3 +41,5 @@ CPU = simpy.Resource(env, capacity=1)
 
 env.process(source(env, PROCESOS, INTERVALO, CPU))
 env.run()
+promedio = sum(tiempos) / len(tiempos)
+print("Tiempo promedio en terminar: ", round(promedio, 2))
