@@ -17,12 +17,12 @@ De la simulacion se obtienen:
 - Cálculo del tiempo promedio de finalización.
 
 Parametros de la simulacion base:
-RANDOM_SEED = 33     # Semilla para reproducibilidad
-PROCESOS = 25        # Número total de procesos a simular
-INTERVALO = 10.0     # Tiempo entre llegadas de procesos
-CPUTIME = 1          # Tiempo que tarda la CPU en ejecutar la cantidad de instrucciones en CPUINST
-CPUINST = 3          # Número de instrucciones ejecutadas por tiempo en CPUTIME
+- RANDOM_SEED = 33     # Semilla para reproducibilidad
+- PROCESOS = 25        # Número total de procesos a simular
+- INTERVALO = 10.0     # Tiempo entre llegadas de procesos
+- CPUTIME = 1          # Tiempo que tarda la CPU en ejecutar la cantidad de instrucciones en CPUINST
+- CPUINST = 3          # Número de instrucciones ejecutadas por tiempo en CPUTIME
 
 Recursos base del sistema:
-RAM total 100
-CPU 1 
+- RAM total 100
+- CPU 1 
