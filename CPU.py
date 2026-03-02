@@ -1,11 +1,11 @@
 import simpy
 import random
 
-RANDOM_SEED = 33
-PROCESOS = 25 #numero total de procesos
-INTERVALO = 10.0 #Genera un nuevo proceso cada x
-CPUTIME = 1 #timpo en completar CPUINST instrucciones
-CPUINST = 3 #Cantidad de instrucciones que realiza cpu en CPUTIME
+RANDOM_SEED = 33 #Semilla
+PROCESOS = 25 #Número total de procesos a simular
+INTERVALO = 10.0 #Tiempo entre llegadas de procesos
+CPUTIME = 1 #Tiempo que tarda la CPU en ejecutar la cantidad de instrucciones en CPUINST
+CPUINST = 3 #Número de instrucciones ejecutadas por tiempo en CPUTIME
 tiempos = []
 
 def source(env, cantidad, intervalo, cpu):
